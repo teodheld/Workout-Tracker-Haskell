@@ -62,7 +62,9 @@ library
         Workout.Domain,
         Workout.Calculations,
         Workout.Parser,
-        Workout.API
+        Workout.API,
+        Workout.App,
+        Workout.Server
 
     -- Modules included in this library but not exported.
     -- other-modules:
@@ -82,7 +84,8 @@ library
         servant,
         servant-server,
         warp,
-        bytestring
+        bytestring,
+        mtl
 
     -- Directories containing source files.
     hs-source-dirs:   src
