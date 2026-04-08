@@ -25,6 +25,6 @@ setParser = do
     return (Set exercise reps weight)
 
 workoutParser :: Parser Workout
-workoutParser = Workout <$> many (setParser <* optional eol)
+workoutParser = Workout <$> some (setParser <* optional eol)
 
 

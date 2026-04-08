@@ -8,6 +8,8 @@ import Data.Proxy (Proxy(..))
 import Data.Aeson (ToJSON)
 import GHC.Generics (Generic)
 import Servant
+import Servant.HTML.Blaze (HTML)
+import Text.Blaze.Html5 (Html)
 
 import Workout.Domain (Workout)
 
@@ -21,7 +23,8 @@ instance ToJSON WorkoutResponse
 
 -- API, encoded at type level 
 type API
-  =    "workouts" :> Get '[JSON] [Workout]
+  =    Get '[HTML] Html
+  :<|> "workouts" :> Get '[JSON] [Workout]
   :<|> "workouts" :> ReqBody '[PlainText] String :> Post '[JSON] WorkoutResponse
 
 api :: Proxy API

@@ -30,6 +30,16 @@
   (major1) == 4 && (major2) <  17 || \
   (major1) == 4 && (major2) == 17 && (minor) <= 2)
 #endif /* MIN_VERSION_base */
+/* package blaze-html-0.9.2.0 */
+#ifndef VERSION_blaze_html
+#define VERSION_blaze_html "0.9.2.0"
+#endif /* VERSION_blaze_html */
+#ifndef MIN_VERSION_blaze_html
+#define MIN_VERSION_blaze_html(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  9 || \
+  (major1) == 0 && (major2) == 9 && (minor) <= 2)
+#endif /* MIN_VERSION_blaze_html */
 /* package bytestring-0.11.5.3 */
 #ifndef VERSION_bytestring
 #define VERSION_bytestring "0.11.5.3"
@@ -80,6 +90,16 @@
   (major1) == 0 && (major2) <  20 || \
   (major1) == 0 && (major2) == 20 && (minor) <= 3)
 #endif /* MIN_VERSION_servant */
+/* package servant-blaze-0.9.1 */
+#ifndef VERSION_servant_blaze
+#define VERSION_servant_blaze "0.9.1"
+#endif /* VERSION_servant_blaze */
+#ifndef MIN_VERSION_servant_blaze
+#define MIN_VERSION_servant_blaze(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  9 || \
+  (major1) == 0 && (major2) == 9 && (minor) <= 1)
+#endif /* MIN_VERSION_servant_blaze */
 /* package servant-server-0.20.3.0 */
 #ifndef VERSION_servant_server
 #define VERSION_servant_server "0.20.3.0"

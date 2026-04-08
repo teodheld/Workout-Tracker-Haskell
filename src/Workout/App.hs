@@ -18,7 +18,6 @@ data AppEnv = AppEnv
 newAppEnv :: IO AppEnv 
 newAppEnv = AppEnv <$> newIORef [] 
 
-
 --Error type 
 data AppError 
     = ParseError String 

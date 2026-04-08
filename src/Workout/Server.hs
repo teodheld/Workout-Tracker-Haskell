@@ -9,6 +9,9 @@ import Data.IORef (readIORef, modifyIORef)
 import Text.Megaparsec (parse, errorBundlePretty)
 import Network.Wai.Handler.Warp (run)
 import Servant
+import Text.Blaze.Html5 (Html, preEscapedToHtml) 
+import qualified Data.Text.IO as TIO               
+import qualified Data.Text as T  
 
 import Workout.Domain (Workout)
 import Workout.Parser (workoutParser)
@@ -17,6 +20,13 @@ import Workout.API (API, WorkoutResponse(..), api)
 import Workout.App (App(..), AppEnv(..), AppError(..), newAppEnv, toServerError)
 
 -- Handlers
+
+getIndex :: App Html
+getIndex = do
+    contents <- liftIO $ readFile "static/index.html"
+    liftIO $ putStrLn $ "Read " ++ show(length contents) ++ " chars from index.html" 
+    return $ preEscapedToHtml (T.pack contents) 
+
 getWorkouts :: App [Workout]
 getWorkouts = do 
     ref <- asks store 
@@ -52,7 +62,7 @@ server :: AppEnv -> Server API
 server env = hoistServer api (appToHandler env) appServer
     where 
         appServer :: ServerT API App 
-        appServer = getWorkouts :<|> postWorkout
+        appServer = getIndex :<|> getWorkouts :<|> postWorkout
 
 runServer :: IO() 
 runServer = do 
