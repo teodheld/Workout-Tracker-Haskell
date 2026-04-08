@@ -4,16 +4,17 @@ import Workout.Domain
 import Text.Megaparsec
 import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
+import qualified Data.Text as T
 
 import Data.Void
 
 type Parser = Parsec Void String
 
 exerciseParser :: Parser Exercise
-exerciseParser =
-        (Squat <$ string "Squat")
-    <|> (Bench <$ string "Bench")
-    <|> (Deadlift <$ string "Deadlift")
+exerciseParser = do 
+    first <- upperChar 
+    rest <- many alphaNumChar
+    return $ Exercise(T.pack (first : rest))
 
 setParser :: Parser Set
 setParser = do
@@ -21,10 +22,13 @@ setParser = do
     space1 
     reps <- L.decimal
     char 'x'
-    weight <- L.decimal
+    weight <- L.float
     return (Set exercise reps weight)
 
 workoutParser :: Parser Workout
-workoutParser = Workout <$> some (setParser <* optional eol)
+workoutParser = do 
+    sets <- some (setParser <* optional eol)
+    eof 
+    return (Workout sets)
 
 

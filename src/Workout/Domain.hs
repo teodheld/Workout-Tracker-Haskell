@@ -4,11 +4,9 @@ module Workout.Domain where
 
 import GHC.Generics (Generic)
 import Data.Aeson (ToJSON, FromJSON)
+import Data.Text (Text)
 
-data Exercise
-  = Squat
-  | Bench
-  | Deadlift
+data Exercise = Exercise Text 
   deriving (Show, Eq, Generic)
 
 instance ToJSON Exercise

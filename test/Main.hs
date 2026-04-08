@@ -10,7 +10,10 @@ import Data.Either (isRight)
 
 -- Arbitrary instance for Exercise, kun i test
 instance Arbitrary Exercise where
-  arbitrary = elements [Squat, Bench, Deadlift]
+  arbitrary = do 
+    first <- elements ['A' .. 'Z']
+    rest <- listOf (elements(['a'..'z'] ++ ['A'..'Z']))
+    return $ Exercise (T.pack (first : rest))
 
 -- Arbitrary instance for Set, kun i test
 instance Arbitrary Set where
