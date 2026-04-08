@@ -5,7 +5,7 @@ module Workout.Server (runServer) where
 import Control.Monad.Reader (asks, runReaderT)
 import Control.Monad.Except (runExceptT, throwError)
 import Control.Monad.IO.Class (liftIO)
-import Data.IORef (readIORef, modifyIORef)
+import Data.IORef (readIORef, modifyIORef, writeIORef)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map 
 import Data.Text (Text)
@@ -71,6 +71,17 @@ getProgress = do
             , progressPoint = zipWith ProgressPoint [1..] vols
             }
 
+deleteWorkout :: Int -> App NoContent
+deleteWorkout idx = do 
+    ref <- asks store 
+    workouts <- liftIO $ readIORef ref
+    if idx < 0 || idx >= length workouts 
+        then throwError NotFound 
+        else do 
+            let updated = take idx workouts ++ drop (idx + 1) workouts 
+            liftIO $ writeIORef ref updated
+            return NoContent
+            
 -- App –> Handler 
 appToHandler :: AppEnv -> App a -> Handler a 
 appToHandler env app = 
@@ -88,7 +99,7 @@ server :: AppEnv -> Server API
 server env = hoistServer api (appToHandler env) appServer
     where 
         appServer :: ServerT API App 
-        appServer = getIndex :<|> getWorkouts :<|> postWorkout :<|> getProgress
+        appServer = getIndex :<|> getWorkouts :<|> postWorkout :<|> deleteWorkout :<|> getProgress
 
 runServer :: IO() 
 runServer = do 

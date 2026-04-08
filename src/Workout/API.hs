@@ -41,7 +41,9 @@ type API
   =    Get '[HTML] Html
   :<|> "workouts" :> Get '[JSON] [Workout]
   :<|> "workouts" :> ReqBody '[PlainText] String :> Post '[JSON] WorkoutResponse
+  :<|> "workouts" :> Capture "index" Int :> Delete '[JSON] NoContent
   :<|> "progress" :> Get '[JSON] [ProgressResponse]
+  
 
 api :: Proxy API
 api = Proxy
