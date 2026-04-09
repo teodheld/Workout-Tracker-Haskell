@@ -53,18 +53,19 @@ getProgress :: App [ProgressResponse]
 getProgress = do 
     ref <- asks store
     workouts <- liftIO $ readIORef ref
-    let chronological = reverse workouts
-        byExercise :: Map Text [Double]
-        byExercise = foldr addWorkout Map.empty (zip[1..] chronological)
+    let byExercise :: Map Text [Double]
+        byExercise = foldr addWorkout Map.empty (zip[1..] workouts)
     return $ map toResponse (Map.toAscList byExercise)
     where 
         addWorkout (_, Workout sets) acc = 
-            foldr addSet acc sets
+            let sessionTotals :: Map Text Double 
+                sessionTotals = foldr addSet Map.empty sets
+            in Map.unionWith (++) acc (Map.map (:[]) sessionTotals)
 
         addSet s acc = 
             let Exercise name = exercise s
                 vol           = setVolume s 
-            in Map.insertWith (++) name [vol] acc
+            in Map.insertWith (+) name vol acc
         
         toResponse (name, vols) = ProgressResponse
             { exerciseName   = name 
