@@ -6,111 +6,125 @@
   <title>Workout Tracker</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, sans-serif;
-      background: #0f0f0f;
-      color: #e0e0e0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
-    }
-    h1 { font-size: 1.8rem; margin-bottom: 0.25rem; color: #fff; }
-    p.subtitle { color: #888; margin-bottom: 1.5rem; font-size: 0.95rem; }
-    .container { width: 100%; max-width: 640px; display: flex; flex-direction: column; gap: 1rem; }
+    :root {
+  --bg:         #f5f0e8;
+  --bg-card:    #ede8df;
+  --border:     #d4c9b5;
+  --text:       #2c2a26;
+  --text-muted: #8a8070;
+  --text-dim:   #6b6358;
+  --accent:     #2c2a26;
+  --accent-fg:  #f5f0e8;
+  --error:      #a0523a;
+  --error-bg:   #f5ede8;
+  --error-border: #c4856a;
+}
 
-    .tabs { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
-    .tab {
-      padding: 0.45rem 1.1rem;
-      border-radius: 6px;
-      border: 1px solid #333;
-      background: transparent;
-      color: #888;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.15s;
-      align-self: auto;
-    }
-    .tab.active { background: #fff; color: #0f0f0f; border-color: #fff; font-weight: 600; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+h1 { font-size: 1.8rem; margin-bottom: 0.25rem; color: var(--text); }
+p.subtitle { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem; }
+.container { width: 100%; max-width: 640px; display: flex; flex-direction: column; gap: 1rem; }
 
-    .panel { display: none; flex-direction: column; gap: 1rem; }
-    .panel.active { display: flex; }
+.tabs { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+.tab {
+  padding: 0.45rem 1.1rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.15s;
+  align-self: auto;
+}
+.tab.active { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 600; }
 
-    label { font-size: 0.85rem; color: #aaa; margin-bottom: 0.3rem; display: block; }
-    textarea {
-      width: 100%; height: 140px;
-      background: #1a1a1a; border: 1px solid #333; border-radius: 8px;
-      color: #e0e0e0; font-family: monospace; font-size: 0.95rem;
-      padding: 0.75rem 1rem; resize: vertical; outline: none;
-    }
-    textarea:focus { border-color: #555; }
-    textarea::placeholder { color: #444; }
+.panel { display: none; flex-direction: column; gap: 1rem; }
+.panel.active { display: flex; }
 
-    button {
-      align-self: flex-start;
-      background: #fff; color: #0f0f0f;
-      border: none; border-radius: 6px;
-      padding: 0.6rem 1.4rem; font-size: 0.95rem; font-weight: 600;
-      cursor: pointer; transition: background 0.15s;
-    }
-    button:hover { background: #ddd; }
-    button:disabled { background: #555; color: #888; cursor: not-allowed; }
+label { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 0.3rem; display: block; }
+textarea {
+  width: 100%; height: 140px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+  color: var(--text); font-family: monospace; font-size: 0.95rem;
+  padding: 0.75rem 1rem; resize: vertical; outline: none;
+}
+textarea:focus { border-color: var(--text-muted); }
+textarea::placeholder { color: var(--border); }
 
-    .result-box {
-      background: #1a1a1a; border: 1px solid #333;
-      border-radius: 8px; padding: 1rem; display: none;
-    }
-    .result-box.visible { display: block; }
-    .result-box.error { border-color: #5c2323; }
-    .result-box h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: #666; margin-bottom: 0.75rem; }
-    .volume { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 1rem; }
-    .volume span { font-size: 1rem; font-weight: 400; color: #666; margin-left: 0.3rem; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    th { text-align: left; color: #555; font-weight: 500; padding: 0.3rem 0.5rem; border-bottom: 1px solid #2a2a2a; }
-    td { padding: 0.4rem 0.5rem; border-bottom: 1px solid #1f1f1f; color: #ccc; }
-    .error-msg { font-family: monospace; font-size: 0.85rem; color: #e07070; white-space: pre-wrap; }
+button {
+  align-self: flex-start;
+  background: var(--accent); color: var(--accent-fg);
+  border: none; border-radius: 6px;
+  padding: 0.6rem 1.4rem; font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; transition: background 0.15s;
+}
+button:hover { background: var(--text-dim); }
+button:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
 
-    .workout-card {
-      background: #1a1a1a; border: 1px solid #2a2a2a;
-      border-radius: 8px; padding: 0.75rem 1rem;
-      margin-bottom: 0.5rem; font-size: 0.875rem; color: #aaa;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 0.5rem;
-    }
-    .workout-card strong { color: #ddd; }
-    .workout-card .summary { flex: 1; }
-    .workout-card .vol-label { color: #666; white-space: nowrap; }
+.result-box {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1rem; display: none;
+}
+.result-box.visible { display: block; }
+.result-box.error { border-color: var(--error-border); background: var(--error-bg); }
+.result-box h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.75rem; }
+.volume { font-size: 2rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; }
+.volume span { font-size: 1rem; font-weight: 400; color: var(--text-muted); margin-left: 0.3rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th { text-align: left; color: var(--text-muted); font-weight: 500; padding: 0.3rem 0.5rem; border-bottom: 1px solid var(--border); }
+td { padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--border); color: var(--text); }
+.error-msg { font-family: monospace; font-size: 0.85rem; color: var(--error); white-space: pre-wrap; }
 
-    .delete-btn {
-      background: transparent;
-      color: #444;
-      border: 1px solid #333;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      padding: 0.2rem 0.5rem;
-      transition: all 0.15s;
-      align-self: auto;
-      flex-shrink: 0;
-    }
-    .delete-btn:hover { color: #e07070; border-color: #5c2323; background: transparent; }
+.workout-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--text-dim);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 0.5rem;
+}
+.workout-card strong { color: var(--text); }
+.workout-card .summary { flex: 1; }
+.workout-card .vol-label { color: var(--text-muted); white-space: nowrap; }
 
-    .exercise-selector { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .ex-btn {
-      padding: 0.35rem 0.9rem; border-radius: 20px;
-      border: 1px solid #333; background: transparent;
-      color: #888; cursor: pointer; font-size: 0.85rem;
-      transition: all 0.15s;
-    }
-    .ex-btn.active { background: #fff; color: #0f0f0f; border-color: #fff; font-weight: 600; }
-    .chart-container {
-      background: #1a1a1a; border: 1px solid #2a2a2a;
-      border-radius: 8px; padding: 1rem;
-      position: relative; height: 280px;
-    }
-    .no-data { color: #555; font-size: 0.9rem; text-align: center; padding: 2rem 0; }
+.delete-btn {
+  background: transparent;
+  color: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  transition: all 0.15s;
+  align-self: auto;
+  flex-shrink: 0;
+}
+.delete-btn:hover { color: var(--error); border-color: var(--error-border); background: transparent; }
+
+.exercise-selector { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.ex-btn {
+  padding: 0.35rem 0.9rem; border-radius: 20px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-muted); cursor: pointer; font-size: 0.85rem;
+  transition: all 0.15s;
+}
+.ex-btn.active { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 600; }
+.chart-container {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1rem;
+  position: relative; height: 280px;
+}
+.no-data { color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 2rem 0; }
   </style>
 </head>
 <body>
@@ -139,7 +153,7 @@
     </div>
 
     <div>
-      <h2 style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;color:#555;margin-bottom:0.75rem">
+      <h2 style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;color:#8a8070;margin-bottom:0.75rem">
         Previous workouts
       </h2>
       <div id="history"></div>
@@ -173,10 +187,6 @@
     document.getElementById('panel-' + tab).classList.add('active');
     if (tab === 'progress') loadProgress();
   }
-
-  // ---------------------------------------------------------------------------
-  // Log tab
-  // ---------------------------------------------------------------------------
 
   async function submitWorkout() {
     const input = document.getElementById("input").value.trim();
@@ -237,7 +247,7 @@
     const el = document.getElementById("history");
 
     if (workouts.length === 0) {
-      el.innerHTML = `<p style="color:#555;font-size:0.875rem">No workouts yet.</p>`;
+      el.innerHTML = `<p style="color:#8a8070;font-size:0.875rem">No workouts yet.</p>`;
       return;
     }
 
@@ -260,10 +270,6 @@
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // Progress tab
-  // ---------------------------------------------------------------------------
-
   async function loadProgress() {
     const res = await fetch("/progress");
     if (!res.ok) return;
@@ -274,7 +280,7 @@
   function renderExerciseButtons() {
     const sel = document.getElementById("exerciseSelector");
     if (progressData.length === 0) {
-      sel.innerHTML = `<span style="color:#555;font-size:0.875rem">No exercises logged yet.</span>`;
+      sel.innerHTML = `<span style="color:#8a8070;font-size:0.875rem">No exercises logged yet.</span>`;
       if (progressChart) { progressChart.destroy(); progressChart = null; }
       return;
     }
@@ -311,6 +317,13 @@
     const labels = data.progressPoint.map(p => `Session ${p.sessionIndex}`);
     const values = data.progressPoint.map(p => p.vol);
 
+    // Read colors from CSS variables so chart always matches the theme
+    const style      = getComputedStyle(document.documentElement);
+    const text       = style.getPropertyValue('--text').trim();
+    const textMuted  = style.getPropertyValue('--text-muted').trim();
+    const textDim    = style.getPropertyValue('--text-dim').trim();
+    const border     = style.getPropertyValue('--border').trim();
+
     if (progressChart) progressChart.destroy();
 
     progressChart = new Chart(canvas, {
@@ -320,9 +333,9 @@
         datasets: [{
           label: `${name} — volume (kg)`,
           data: values,
-          borderColor: "#ffffff",
-          backgroundColor: "rgba(255,255,255,0.07)",
-          pointBackgroundColor: "#ffffff",
+          borderColor: text,
+          backgroundColor: "rgba(44,42,38,0.08)",
+          pointBackgroundColor: text,
           tension: 0.3,
           fill: true,
         }]
@@ -330,11 +343,11 @@
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: "#aaa" } } },
+        plugins: { legend: { labels: { color: textDim } } },
         scales: {
-          x: { ticks: { color: "#555" }, grid: { color: "#222" } },
-          y: { ticks: { color: "#555" }, grid: { color: "#222" },
-               title: { display: true, text: "Volume (kg)", color: "#555" } }
+          x: { ticks: { color: textMuted }, grid: { color: border } },
+          y: { ticks: { color: textMuted }, grid: { color: border },
+               title: { display: true, text: "Volume (kg)", color: textMuted } }
         }
       }
     });

@@ -64,7 +64,8 @@ library
         Workout.Parser,
         Workout.API,
         Workout.App,
-        Workout.Server
+        Workout.Server,
+        Workout.PrettyPrint
 
     -- Modules included in this library but not exported.
     -- other-modules:
@@ -156,4 +157,5 @@ test-suite workout-tracker-test
         QuickCheck,
         tasty,
         tasty-quickcheck,
-        megaparsec
+        megaparsec,
+        text
