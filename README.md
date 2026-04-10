@@ -13,7 +13,9 @@ A type-safe workout tracker written in Haskell. The project focuses on functiona
 
 Workouts are entered as plain text, one exercise per line:
 Squat 5x100.0
+
 Bench 10x80.0, 8x85.0, 6x90.0
+
 Deadlift 3x180.0
 
 Each line follows the format `Exercise RepsxWeight`, where multiple sets of the same exercise can be written as a comma-separated list.
