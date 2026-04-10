@@ -21,20 +21,20 @@ Deadlift 3x180.0
 Each line follows the format `Exercise RepsxWeight`, where multiple sets of the same exercise can be written as a comma-separated list.
 
 ## Project Structure
-src/Workout/
-Domain.hs         -- Core data types (Exercise, Set, Workout)
-Parser.hs         -- MegaParsec DSL parser
-Calculations.hs   -- HasVolume typeclass and volume calculations
-PrettyPrint.hs    -- Pretty printer for roundtrip testing
-API.hs            -- Servant type-level API definition
-Server.hs         -- Request handlers and server wiring
-App.hs            -- ReaderT/ExceptT monad transformer stack
-app/
-Main.hs           -- Entry point
-test/
-Main.hs           -- QuickCheck property tests
-static/
-index.html        -- Web frontend
+- src/Workout/ 
+  - Domain.hs         -- Core data types (Exercise, Set, Workout)
+  - Parser.hs         -- MegaParsec DSL parser
+  - Calculations.hs   -- HasVolume typeclass and volume calculations
+  - PrettyPrint.hs    -- Pretty printer for roundtrip testing
+  - API.hs            -- Servant type-level API definition
+  - Server.hs         -- Request handlers and server wiring
+  - App.hs            -- ReaderT/ExceptT monad transformer stack
+- app/
+  - Main.hs           -- Entry point
+- test/
+  - Main.hs           -- QuickCheck property tests
+- static/
+  - index.html        -- Web frontend
 
 ## Techniques
 
