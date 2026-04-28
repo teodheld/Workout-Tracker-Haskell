@@ -2,11 +2,14 @@ module Workout.Calculations where
 
 import Workout.Domain
 
-setVolume :: Set -> Double
-setVolume s = fromIntegral (repetitions s) * weight s
+class HasVolume a where
+    volume :: a -> Double
 
-totalVolume :: Workout -> Double
-totalVolume (Workout sets) = sum[setVolume s| s <- sets]
+instance HasVolume Set where 
+    volume s = fromIntegral (repetitions s) * weight s
+
+instance HasVolume Workout where
+    volume (Workout sets) = sum(map volume sets)
 
 
 

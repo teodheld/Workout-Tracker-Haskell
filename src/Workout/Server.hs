@@ -19,7 +19,7 @@ import qualified Data.Text as T
 
 import Workout.Domain (Workout(..), Exercise(..), Set(..))
 import Workout.Parser (workoutParser)
-import Workout.Calculations (totalVolume, setVolume)
+import qualified Workout.Calculations as Calc
 import Workout.API (API, WorkoutResponse(..), ProgressResponse(..), ProgressPoint(..), api)
 import Workout.App (App(..), AppEnv(..), AppError(..), newAppEnv, toServerError)
 
@@ -46,7 +46,7 @@ postWorkout input =
             liftIO $ modifyIORef ref (w : )
             return $ WorkoutResponse
                 { workout = w
-                , volume = totalVolume w
+                , volume = Calc.volume w
                 }
 
 getProgress :: App [ProgressResponse]
@@ -64,7 +64,7 @@ getProgress = do
 
         addSet s acc = 
             let Exercise name = exercise s
-                vol           = setVolume s 
+                vol           = Calc.volume s 
             in Map.insertWith (+) name vol acc
         
         toResponse (name, vols) = ProgressResponse

@@ -4,11 +4,11 @@ module Main where
 import Test.QuickCheck
 import Workout.Domain
 import Workout.Parser
-import Workout.Calculations
 import Workout.PrettyPrint
 import Text.Megaparsec (parse)
 import Data.Either (isRight)
 import qualified Data.Text as T
+import qualified Workout.Calculations as Calc
 
 -- Arbitrary instance for Exercise, kun i test
 instance Arbitrary Exercise where
@@ -34,15 +34,15 @@ prop_exerciseShow ex = show ex /= ""
 
 -- Total volume is never negative
 prop_totalVolumeNonNegative :: Workout -> Bool
-prop_totalVolumeNonNegative w = totalVolume w >= 0
+prop_totalVolumeNonNegative w = Calc.volume w >= 0
 
 -- Single set volume equals reps * weight
 prop_setVolume :: Set -> Bool
-prop_setVolume s = setVolume s == fromIntegral (repetitions s) * weight s
+prop_setVolume s = Calc.volume s == fromIntegral (repetitions s) * weight s
 
 -- Total workout volume equals sum of set volumes
 prop_totalVolumeIsSum :: Workout -> Bool
-prop_totalVolumeIsSum (Workout sets) = totalVolume (Workout sets) == sum (map setVolume sets)
+prop_totalVolumeIsSum (Workout sets) = Calc.volume (Workout sets) == sum (map Calc.volume sets)
 
 -- Parser accepts all known exercise names
 prop_exerciseParser :: Bool
@@ -51,7 +51,7 @@ prop_exerciseParser =
 
 -- Parser accepts a valid set string
 prop_setParser :: Bool
-prop_setParser = isRight $ parse setParser "" "Squat 8x100.0"
+prop_setParser = isRight $ parse setLineParser "" "Squat 8x100.0"
 
 -- Parser accepts a multi-set workout string
 prop_workoutParser :: Bool
@@ -64,7 +64,7 @@ prop_totalVolumeParser :: Bool
 prop_totalVolumeParser =
   let input = "Squat 8x100.0\nBench 12x50.0\nDeadlift 6x150.0"
   in case parse workoutParser "" input of
-       Right w -> totalVolume w == (8*100.0 + 12*50.0 + 6*150.0)
+       Right w -> Calc.volume w == (8*100.0 + 12*50.0 + 6*150.0)
        Left _  -> False
 
 -- Roundtrip: pretty printing a workout and parsing it gives back the same workout
