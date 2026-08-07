@@ -70,3 +70,7 @@ cabal test --test-show-details=direct
 - `QuickCheck` — property-based testing
 - `mtl` / `transformers` — monad transformer stack
 - `containers` — `Data.Map` for progress aggregationSonnet 4.6
+
+
+## Rapport
+[📄 Read the report (PDF)](docs/ProjectReport.pdf) 
